@@ -30,7 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.connectionStatus = NXMConnectionStatusDisconnected;
-    self.callStatus = NXMCallStatusDisconnected;
+    self.callStatus = NXMCallMemberStatusCompleted;
     self.statusLabel.text = @"Ready";
     [self.loadingIndicator startAnimating];
     [self updateInterface];
@@ -48,13 +48,13 @@
         case NXMConnectionStatusDisconnected:
             self.callButton.alpha = 0;
             self.statusLabel.text = @"Not connected";
-            self.statusLabel.alpha = 0;
+            self.statusLabel.alpha = 1;
             [self.loadingIndicator stopAnimating];
             break;
         case NXMConnectionStatusConnecting:
             self.callButton.alpha = 0;
             self.statusLabel.text = @"Connecting...";
-            self.statusLabel.alpha = 0;
+            self.statusLabel.alpha = 1;
             [self.loadingIndicator startAnimating];
             break;
         case NXMConnectionStatusConnected:
@@ -126,7 +126,7 @@
     self.statusLabel.text = @"Calling...";
     [self.loadingIndicator startAnimating];
     self.callButton.alpha = 0;
-    [self.nexmoClient call:@[@"CALLEE_NUMBER"] callType:NXMCallTypeServer delegate:self completion:^(NSError * _Nullable error, NXMCall * _Nullable call) {
+    [self.nexmoClient call:@[@"CALLEE_NUMBER"] callHandler:NXMCallHandlerServer delegate:self completion:^(NSError * _Nullable error, NXMCall * _Nullable call) {
         if(error) {
             NSLog(@"❌❌❌ call not created: %@", error);
             self.ongoingCall = nil;
@@ -166,7 +166,7 @@
     //Handle Hangup
     if(callMember.status == NXMCallMemberStatusCancelled || callMember.status == NXMCallMemberStatusCompleted) {
         self.ongoingCall = nil;
-        self.callStatus = NXMCallStatusDisconnected;
+        self.callStatus = NXMCallMemberStatusCompleted;
     }
     [self updateInterface];
 }

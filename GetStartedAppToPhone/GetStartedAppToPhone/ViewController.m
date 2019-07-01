@@ -30,7 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.connectionStatus = NXMConnectionStatusDisconnected;
-    self.callStatus = NXMCallStatusDisconnected;
+    self.callStatus = NXMCallMemberStatusCompleted;
     self.statusLabel.text = @"Ready";
     [self.loadingIndicator startAnimating];
     [self updateInterface];
@@ -48,13 +48,13 @@
         case NXMConnectionStatusDisconnected:
             self.callButton.alpha = 0;
             self.statusLabel.text = @"Not connected";
-            self.statusLabel.alpha = 0;
+            self.statusLabel.alpha = 1;
             [self.loadingIndicator stopAnimating];
             break;
         case NXMConnectionStatusConnecting:
             self.callButton.alpha = 0;
             self.statusLabel.text = @"Connecting...";
-            self.statusLabel.alpha = 0;
+            self.statusLabel.alpha = 1;
             [self.loadingIndicator startAnimating];
             break;
         case NXMConnectionStatusConnected:
